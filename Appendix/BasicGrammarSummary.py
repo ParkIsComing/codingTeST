@@ -1,6 +1,8 @@
 #반올림 round
 #첫번째 인자는 실수형 데이터, 두번째 인자는 반올림하고자하는 위치-1
+from cmath import pi
 from collections import deque
+import imp
 from typing import Deque
 
 a=123.456
@@ -124,7 +126,7 @@ bfs(graph,1,visited)
 
 #split, sep
 s='3:10'
-a,b=input().split(':') #콜론 ':' 기호를 기준으로 자른다.
+a,b=s.split(':') #콜론 ':' 기호를 기준으로 자른다.
 print(a, b, sep=':') # 콜론 ':' 기호를 사이에 두고 값을 출력한다. sep = 분류기호(seperator)
 
 s = 'abcd'
@@ -135,8 +137,112 @@ print(s[2:4]) #문자열 2번째 문자부터 3번째 문자까지 -> cd
 #진수
 a=20
 print('%x'%a) #20이 16진수로 출력됨
-n = int(input(), 16)      #입력된 값을 16진수로 인식해 변수 n에 저장
-print('%o' % n)  #n 값을 8진수(octal) 형태 문자열로 출력
+print('%o' % a)  #n 값을 8진수(octal) 형태 문자열로 출력
 
 #유니코드
 #chr()는 정수->문자(유니코드 문자), ord()는 문자->정수(유니코드 값)
+
+#반올림
+#format(수,".2f") 소수점 아래 2번째짜리까지 
+#정수값 0은 False(거짓)로 평가되고, 그 외의 값들은 모두 True(참)로 평가된다.
+n=True
+print(bool(n)) #n==0이면 False 아니면 True
+
+##정렬
+#선택 정렬
+array=[7,5,9,0,3,1,6,2,4,8]
+
+for i in range(len(array)):
+    min_index=i
+    for j in range(i+1, len(array)):
+        if array[min_index]>array[j]:
+            min_index=j
+    array[min_index], array[i]= array[i], array[min_index]
+
+print(array)
+
+#삽입 정렬
+array=[7,5,9,0,3,1,6,2,4,8]
+for i in range(1, len(array)):#첫번째꺼는 처음부터 정렬 되어있음
+    for j in range(i, 0, -1):#인덱스 i부터 1까지 감소하며 반복
+        if array[j] < array[j-1]:
+            array[j], array[j-1]= array[j-1], array[j]
+        else:#자기보다 작은 데이터를 만나면 거기서 멈춤
+            break
+
+print(array)
+
+#퀵 정렬1
+array=[7,5,9,0,3,1,6,2,4,8]
+def quick_sort(array):
+    if len(array)<=1:
+         return array
+        
+    pivot=array[0]#첫번째 원소를 피봇으로 함
+    tail=array[1:] #array[1]~ 즉 리스트에서 피봇을 제외한 모든 요소들
+    
+    left_side = [x for x in tail if x<= pivot]
+    right_side=[x for x in tail if x>pivot]
+
+    return quick_sort(left_side)+[pivot]+quick_sort(right_side) #분할 이후 왼쪽 부분과 오른쪽 부분에서 각각 정렬을 수행하고 전체 리스트를 반환
+
+
+print(quick_sort(array))
+
+#퀵정렬2
+array=[7,5,9,0,3,1,6,2,4,8]
+
+def quick_sort2(array, start, end):
+    if start >=  end:#원소가 1개면 종료
+        return
+    pivot= start
+    left=start+1
+    right=end
+    while left <= right:
+        while left <= end and array[left]<= array[pivot]:
+            left+=1
+        while right>  start and array[right] >=array[pivot]:
+            right-=1
+        if left >right:
+            array[right], array[pivot]= array[pivot],array[right]
+        else:
+            array[left],array[right]=array[right],array[left]
+        
+    quick_sort2(array, start, right-1)
+    quick_sort2(array, right+1, end)
+
+
+quick_sort2(array, 0, len(array)-1)
+print(array)
+
+#계수 정렬
+array=[7,5,9,0,3,1,6,2,9,1,4,8,0,5,2]
+count=[0]* (max(array)+1) #정렬할 배열의 모든 요소의 범위를 포함하는 리스트 선언
+
+for i in range(len(array)):
+    count[array[i]]+=1 #각 데이터에 해당하는 인덱스의 값 증가
+
+for i in range(len(count)):#리스트에 기록된 정렬 정보 확인
+    for j in range(count[i]):
+        print(i, end=' ')#띄어쓰기를 구분으로 등장한 횟수만큼 인덱스 출력
+
+#파이썬의 정렬 라이브러리
+array=[7,5,9,0,3,1,6,2,4,8]
+result= sorted(array) #sorted()는 리스트 자료형으로 반환
+print(result)
+
+array=[7,5,9,0,3,1,6,2,4,8]
+array.sort()#정렬된 리스트 별도로 반환x 내부 원소가 바로 정렬됨
+print(array)
+
+#sorted()나 sort()는 key를 매개변수로 입력받을 수 있음
+array=[('banana', 2), ('사과',5),('당근',3)]
+def setting(data):
+    return data[1]
+result= sorted(array, key=setting)
+print(result)
+
+#빠르게 입력받기 readline()
+import sys
+input_data=sys.stdin.readline().rstrip()
+print(input_data)
