@@ -6,7 +6,7 @@ import imp
 from typing import Deque
 
 a=123.456
-print(round(a,2)) #123.456을 소수점 셋째 자리에서 반올림
+print(round(a,2)) #123.456을 소수점 셋째 자리에서 반올림 이건 만약에 값이 0.00이면 0.0으로 나옴
 print(round(a)) #두번째 인자 안 넣으면 소수점 첫째 자리에서 반올림
 
 
@@ -83,6 +83,35 @@ graph[0].append((1,7))
 graph[0].append((2,5))
 graph[1].append((0,7))
 graph[2].append((0,5))  #graph==[[1,7,[2,5]],[0,7],[0,5]]
+
+#heapq - 우선순위큐(최소힙) 구현
+import heapq
+
+def heapsort(iterable):
+    h=[]
+    result=[]
+    for value in iterable:
+        heapq.heappush(h, value) #힙에 value를 차례대로 삽입
+    for i in range(len(h)):
+        result.append(heapq.heappop(h)) # 힙에 삽입된 거 차례대로 빼서 리스트 삽입
+    return result
+
+result= heapsort([1,3,5,7,9,2,4,6,8,0])
+print(result) #디폴트는 최소힙이라서 결과는 [0,1,2,3,4,5,6,7,8,9]
+
+#heapq- 우선순위큐(최대힙) 구현
+def heapsort2(iterable):
+    h=[]
+    result=[]
+    for value in iterable:
+        heapq.heappush(h, -value) #힙에 원소를 삽입하기 전 잠시 부호를 반대로 바꿨다가
+    for i in range(len(h)):
+        result.append(-heapq.heappop(h)) #뺄때 원래 부호로 되돌림
+    return result
+
+result= heapsort([1,3,5,7,9,2,4,6,8,0])
+print(result) 
+
 
 ##DFS(Depth Fisrt Search)
 #1. 탐색 시작 노드를 스택에 삽입 후 방문 처리
@@ -246,3 +275,7 @@ print(result)
 import sys
 input_data=sys.stdin.readline().rstrip()
 print(input_data)
+
+#3항연산
+a,b,c=1,2,3
+biggest= (a if a>b else b) if ((a if a>b else b)>c) else c
